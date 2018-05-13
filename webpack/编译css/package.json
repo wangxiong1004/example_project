@@ -1,0 +1,9 @@
+{
+  "name": "",
+  "version": "",
+  "devDependencies": {
+    "css-loader": "^0.28.11",
+    "style-loader": "^0.21.0",
+    "webpack": "^3.12.0"
+  }
+}

@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+
+    <head>
+        <meta charset="UTF-8">
+        <title></title>
+        <style>
+            .progress__container {
+                width: 500px;
+                height: 10px;
+                border-radius: 10px;
+                background-color: #e5e5e5;
+            }
+
+            .progress__bar {
+                width: 0;
+                height: 10px;
+                line-height: 10px;
+                background-color: #ff6700;
+                border-radius: 10px;
+            }
+        </style>
+    </head>
+
+    <body>
+        <div class="progress__container" id="progressContainer">
+            <div class="progress__bar" id="progressBar"></div>
+        </div>
+        <span id="progressText">0%</span>
+
+        <script>
+            /*
+             * @param {object} 容器DOM
+             * @param {object} 进度条DOM
+             * @param {number} 总进度
+             * @param {number} 已完成进度
+             * @param {object} 进度百分比 -- 可选
+             */
+            function progress(containerEle, progressEle, totalProgress,
+                completionDegree, progressTextDOM) {
+                var containerEleWidth = containerEle.offsetWidth;
+                var progressSpeed = 5;
+                var timer;
+
+                progressEle.style.width = 0;
+
+                if (!window.requestAnimationFrame) {    // 兼容IE9及以下版本
+                    clearInterval(timer);
+
+                    timer = setInterval(function() {
+
+                        if (parseInt(progressEle.style.width) <
+                            parseInt(completionDegree / totalProgress *
+                                containerEleWidth)) {
+                            progressEle.style.width = parseInt(
+                                    progressEle.style.width) + progressSpeed + 'px';
+
+                            if (progressTextDOM) {
+                                progressTextDOM.innerHTML = parseInt(
+                                        progressEle.style.width) / 5 + '%';
+                            }
+                        } else {
+                            clearInterval(timer);
+                        }
+                    }, 16);
+                } else {
+                    cancelAnimationFrame(timer);
+
+                    timer = requestAnimationFrame(function fun() {
+
+                        if (parseInt(progressEle.style.width) <
+                            parseInt(completionDegree / totalProgress *
+                                containerEleWidth)) {
+                            progressEle.style.width = parseInt(
+                                    progressEle.style.width) +
+                                progressSpeed + 'px';
+
+                            if (progressTextDOM) {
+                                progressTextDOM.innerHTML = parseInt(
+                                        progressEle.style.width) / 5 + '%';
+                            }
+                            timer = requestAnimationFrame(fun);
+                        } else {
+                            cancelAnimationFrame(timer);
+                        }
+                    });
+                }
+            };
+
+            var containerDOM = document.getElementById('progressContainer');
+            var progressBar = document.getElementById('progressBar');
+            var progressTextDOM = document.getElementById('progressText');
+
+            progress(containerDOM, progressBar, 12200, 4000, progressTextDOM);
+        </script>
+    </body>
+
+</html>
